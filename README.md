@@ -1,6 +1,6 @@
-# App Name
+# Select with auto-suggesstions and typeahead
 
-App Details
+Select element with auto-suggesstions and typeahead using Reactjs and Typescript
 
 ---
 
