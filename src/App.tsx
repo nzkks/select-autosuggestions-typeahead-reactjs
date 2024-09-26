@@ -17,7 +17,7 @@ const App = () => {
     <>
       <h3>Select with auto-suggesstions and typeahead</h3>
 
-      <Autocomplete placeholder="Enter recipe name..." fetchSuggestions={handleFetchSuggestions} />
+      <Autocomplete placeholder="Enter recipe name..." fetchSuggestions={handleFetchSuggestions} dataKey={'name'} />
     </>
   );
 };

@@ -4,9 +4,10 @@ import * as _ from 'lodash';
 type Props = {
   placeholder: string;
   fetchSuggestions?: (query: string) => Promise<[]>;
+  dataKey?: string;
 };
 
-const Autocomplete = ({ placeholder = '', fetchSuggestions }: Props) => {
+const Autocomplete = ({ placeholder = '', fetchSuggestions, dataKey = '' }: Props) => {
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,9 +66,11 @@ const Autocomplete = ({ placeholder = '', fetchSuggestions }: Props) => {
       {isLoading && <div>Loading...</div>}
       {suggestions.length > 0 && (
         <ul role="listbox">
-          {suggestions.map(suggestion => (
-            <li key={suggestion.name}>{suggestion.name}</li>
-          ))}
+          {suggestions.map((suggestion, index) => {
+            const currentSuggestion = dataKey ? suggestion[dataKey] : suggestion;
+
+            return <li key={index}>{currentSuggestion}</li>;
+          })}
         </ul>
       )}
     </div>
