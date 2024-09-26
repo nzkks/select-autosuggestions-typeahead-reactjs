@@ -1,5 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import * as _ from 'lodash';
+import SuggestionsList from '../suggestionsList/SuggestionsList';
 
 type Props = {
   placeholder: string;
@@ -66,11 +67,7 @@ const Autocomplete = ({ placeholder = '', fetchSuggestions, dataKey = '' }: Prop
       {isLoading && <div>Loading...</div>}
       {suggestions.length > 0 && (
         <ul role="listbox">
-          {suggestions.map((suggestion, index) => {
-            const currentSuggestion = dataKey ? suggestion[dataKey] : suggestion;
-
-            return <li key={index}>{currentSuggestion}</li>;
-          })}
+          <SuggestionsList suggestions={suggestions} dataKey={dataKey} />
         </ul>
       )}
     </div>
