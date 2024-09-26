@@ -60,6 +60,16 @@ const Autocomplete = ({ placeholder = '', fetchSuggestions }: Props) => {
   return (
     <div className="container">
       <input type="text" value={inputValue} onChange={handleOnChange} placeholder={placeholder} />
+
+      {error && <div>{error}</div>}
+      {isLoading && <div>Loading...</div>}
+      {suggestions.length > 0 && (
+        <ul role="listbox">
+          {suggestions.map(suggestion => (
+            <li key={suggestion.name}>{suggestion.name}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
