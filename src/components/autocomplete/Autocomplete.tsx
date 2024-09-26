@@ -1,4 +1,5 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import * as _ from 'lodash';
 
 type Props = {
   placeholder: string;
@@ -42,9 +43,14 @@ const Autocomplete = ({ placeholder = '', fetchSuggestions }: Props) => {
     }
   };
 
+  const getSuggestionsDebounced = useCallback(
+    _.debounce(input => getSuggestions(input), 500),
+    []
+  );
+
   useEffect(() => {
     if (inputValue.length > 1) {
-      getSuggestions(inputValue);
+      getSuggestionsDebounced(inputValue);
     } else {
       setSuggestions([]);
     }
