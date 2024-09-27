@@ -1,15 +1,15 @@
-type Props = {
-  suggestions: [];
-  dataKey?: string;
+type Props<T> = {
+  suggestions: T[];
+  dataKey: T | string;
 };
 
-const SuggestionsList = ({ suggestions, dataKey = '' }: Props) => {
+const SuggestionsList = <T,>({ suggestions, dataKey }: Props<T>) => {
   return (
     <>
       {suggestions.map((suggestion, index) => {
-        const currentSuggestion = dataKey ? suggestion[dataKey] : suggestion;
+        const currentSuggestion = typeof dataKey === 'string' ? suggestion[dataKey as keyof T] : suggestion;
 
-        return <li key={index}>{currentSuggestion}</li>;
+        return <li key={index}>{currentSuggestion as string}</li>;
       })}
     </>
   );

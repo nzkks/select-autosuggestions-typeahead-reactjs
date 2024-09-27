@@ -1,3 +1,5 @@
+import RecipeAPIResponseType from '../../types/RecipeAPIResponseType';
+import RecipeData from '../../types/RecipeData';
 import Autocomplete from '../autocomplete/Autocomplete';
 
 const RecipeSelection = () => {
@@ -9,7 +11,12 @@ const RecipeSelection = () => {
     }
 
     const result = await response.json();
-    return result.recipes;
+    const recipes: RecipeData[] = result.recipes.map((recipe: RecipeAPIResponseType) => ({
+      id: recipe.id,
+      name: recipe.name,
+    }));
+
+    return recipes;
   };
 
   return <Autocomplete placeholder="Enter recipe name..." fetchSuggestions={handleFetchSuggestions} dataKey={'name'} />;

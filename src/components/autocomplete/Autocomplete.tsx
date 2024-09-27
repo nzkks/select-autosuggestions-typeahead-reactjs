@@ -2,15 +2,15 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import * as _ from 'lodash';
 import SuggestionsList from '../suggestionsList/SuggestionsList';
 
-type Props = {
+type Props<T> = {
   placeholder: string;
-  fetchSuggestions?: (query: string) => Promise<[]>;
+  fetchSuggestions?: (query: string) => Promise<T[]>;
   dataKey?: string;
 };
 
-const Autocomplete = ({ placeholder = '', fetchSuggestions, dataKey = '' }: Props) => {
+const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: Props<T>) => {
   const [inputValue, setInputValue] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
