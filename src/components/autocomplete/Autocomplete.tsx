@@ -1,6 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import * as _ from 'lodash';
 import SuggestionsList from '../suggestionsList/SuggestionsList';
+import './autocomplete.css';
 
 type Props<T> = {
   placeholder: string;
@@ -63,10 +64,10 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
     <div className="container">
       <input type="text" value={inputValue} onChange={handleOnChange} placeholder={placeholder} />
 
-      {error && <div>{error}</div>}
-      {isLoading && <div>Loading...</div>}
+      {error && <div className="error">{error}</div>}
+      {isLoading && <div className="loading">Loading...</div>}
       {suggestions.length > 0 && (
-        <ul role="listbox">
+        <ul className="suggestions-list" role="listbox">
           <SuggestionsList suggestions={suggestions} dataKey={dataKey} />
         </ul>
       )}

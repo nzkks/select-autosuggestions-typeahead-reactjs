@@ -9,7 +9,11 @@ const SuggestionsList = <T,>({ suggestions, dataKey }: Props<T>) => {
       {suggestions.map((suggestion, index) => {
         const currentSuggestion = typeof dataKey === 'string' ? suggestion[dataKey as keyof T] : suggestion;
 
-        return <li key={index}>{currentSuggestion as string}</li>;
+        return (
+          <li key={index} className="suggestion-item">
+            {currentSuggestion as string}
+          </li>
+        );
       })}
     </>
   );
