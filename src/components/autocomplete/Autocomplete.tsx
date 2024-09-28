@@ -58,21 +58,22 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
     []
   );
 
+  const clearAndCloseDropdown = () => {
+    setSuggestions([]);
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     if (inputValue.length > 1 && !isOptionClicked) {
       getSuggestionsDebounced(inputValue);
-    } else {
-      setSuggestions([]);
-      setIsOpen(false);
-    }
+    } else clearAndCloseDropdown();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
   const handleSuggestionClick = (suggestion: T) => {
     setIsOptionClicked(true);
     setInputValue(dataKey ? (suggestion[dataKey as keyof T] as string) : (suggestion as string));
-    setSuggestions([]);
-    setIsOpen(false);
+    clearAndCloseDropdown();
   };
 
   const handleKeydown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -88,16 +89,14 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
         }
       } else if (event.key === 'Escape') {
         setInputValue('');
-        setSuggestions([]);
-        setIsOpen(false);
+        clearAndCloseDropdown();
       }
     }
   };
 
   const handleOutsideClick = (event: Event) => {
     if (suggestions.length > 0 && isOpen) {
-      setSuggestions([]);
-      setIsOpen(false);
+      clearAndCloseDropdown();
     }
   };
 
