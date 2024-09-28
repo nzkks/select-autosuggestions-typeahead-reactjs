@@ -12,6 +12,7 @@ type Props<T> = {
 const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: Props<T>) => {
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<T[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +34,8 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
       }
 
       if (result) {
-        console.log(result);
         setSuggestions(result);
+        setIsOpen(true);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -59,6 +60,7 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
       getSuggestionsDebounced(inputValue);
     } else {
       setSuggestions([]);
+      setIsOpen(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
@@ -67,21 +69,25 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
     setIsOptionClicked(true);
     setInputValue(dataKey ? (suggestion[dataKey as keyof T] as string) : (suggestion as string));
     setSuggestions([]);
+    setIsOpen(false);
   };
 
   const handleKeydown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'ArrowUp') {
-      setSelectedOptionIndex(prev => (prev === -1 ? suggestions.length - 1 : prev - 1));
-    } else if (event.key === 'ArrowDown') {
-      setSelectedOptionIndex(prev => (prev === suggestions.length - 1 ? -1 : prev + 1));
-    } else if (event.key === 'Enter') {
-      if (selectedOptionIndex !== -1) {
-        const selectedSuggestion = suggestions[selectedOptionIndex];
-        handleSuggestionClick(selectedSuggestion);
+    if (suggestions.length > 0 && isOpen) {
+      if (event.key === 'ArrowUp') {
+        setSelectedOptionIndex(prev => (prev === -1 ? suggestions.length - 1 : prev - 1));
+      } else if (event.key === 'ArrowDown') {
+        setSelectedOptionIndex(prev => (prev === suggestions.length - 1 ? -1 : prev + 1));
+      } else if (event.key === 'Enter') {
+        if (selectedOptionIndex !== -1) {
+          const selectedSuggestion = suggestions[selectedOptionIndex];
+          handleSuggestionClick(selectedSuggestion);
+        }
+      } else if (event.key === 'Escape') {
+        setInputValue('');
+        setSuggestions([]);
+        setIsOpen(false);
       }
-    } else if (event.key === 'Escape') {
-      setInputValue('');
-      setSuggestions([]);
     }
   };
 
