@@ -17,6 +17,7 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
   const [error, setError] = useState('');
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsOptionClicked(false);
     setInputValue(event.target.value);
   };
 
