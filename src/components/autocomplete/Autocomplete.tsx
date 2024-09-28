@@ -79,6 +79,9 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
         const selectedSuggestion = suggestions[selectedOptionIndex];
         handleSuggestionClick(selectedSuggestion);
       }
+    } else if (event.key === 'Escape') {
+      setInputValue('');
+      setSuggestions([]);
     }
   };
 
