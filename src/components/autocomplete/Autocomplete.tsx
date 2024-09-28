@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import * as _ from 'lodash';
 import SuggestionsList from '../suggestionsList/SuggestionsList';
 import './autocomplete.css';
@@ -12,6 +12,7 @@ type Props<T> = {
 const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: Props<T>) => {
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<T[]>([]);
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -68,9 +69,23 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
     setSuggestions([]);
   };
 
+  const handleKeydown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'ArrowUp') {
+      setSelectedOptionIndex(prev => (prev === -1 ? suggestions.length - 1 : prev - 1));
+    } else if (event.key === 'ArrowDown') {
+      setSelectedOptionIndex(prev => (prev === suggestions.length - 1 ? -1 : prev + 1));
+    }
+  };
+
   return (
     <div className="container">
-      <input type="text" value={inputValue} onChange={handleOnChange} placeholder={placeholder} />
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleOnChange}
+        onKeyDown={handleKeydown}
+        placeholder={placeholder}
+      />
 
       {error && <div className="error">{error}</div>}
       {isLoading && <div className="loading">Loading...</div>}
@@ -79,6 +94,7 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
           <SuggestionsList
             suggestions={suggestions}
             queryText={inputValue}
+            selectedOptionIndex={selectedOptionIndex}
             dataKey={dataKey}
             onSuggestionClick={handleSuggestionClick}
           />
