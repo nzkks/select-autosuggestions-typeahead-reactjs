@@ -74,6 +74,11 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
       setSelectedOptionIndex(prev => (prev === -1 ? suggestions.length - 1 : prev - 1));
     } else if (event.key === 'ArrowDown') {
       setSelectedOptionIndex(prev => (prev === suggestions.length - 1 ? -1 : prev + 1));
+    } else if (event.key === 'Enter') {
+      if (selectedOptionIndex !== -1) {
+        const selectedSuggestion = suggestions[selectedOptionIndex];
+        handleSuggestionClick(selectedSuggestion);
+      }
     }
   };
 
