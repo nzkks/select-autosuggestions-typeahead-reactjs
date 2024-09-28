@@ -60,6 +60,11 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
+  const handleSuggestionClick = (suggestion: T) => {
+    setInputValue(dataKey ? (suggestion[dataKey as keyof T] as string) : (suggestion as string));
+    setSuggestions([]);
+  };
+
   return (
     <div className="container">
       <input type="text" value={inputValue} onChange={handleOnChange} placeholder={placeholder} />
@@ -68,7 +73,7 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
       {isLoading && <div className="loading">Loading...</div>}
       {suggestions.length > 0 && (
         <ul className="suggestions-list" role="listbox">
-          <SuggestionsList suggestions={suggestions} dataKey={dataKey} />
+          <SuggestionsList suggestions={suggestions} dataKey={dataKey} onSuggestionClick={handleSuggestionClick} />
         </ul>
       )}
     </div>
