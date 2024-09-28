@@ -12,6 +12,7 @@ type Props<T> = {
 const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: Props<T>) => {
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<T[]>([]);
+  const [isOptionClicked, setIsOptionClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -52,7 +53,7 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
   );
 
   useEffect(() => {
-    if (inputValue.length > 1) {
+    if (inputValue.length > 1 && !isOptionClicked) {
       getSuggestionsDebounced(inputValue);
     } else {
       setSuggestions([]);
@@ -61,6 +62,7 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
   }, [inputValue]);
 
   const handleSuggestionClick = (suggestion: T) => {
+    setIsOptionClicked(true);
     setInputValue(dataKey ? (suggestion[dataKey as keyof T] as string) : (suggestion as string));
     setSuggestions([]);
   };
