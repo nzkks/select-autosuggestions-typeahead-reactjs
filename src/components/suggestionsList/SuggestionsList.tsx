@@ -5,21 +5,16 @@ type Props<T> = {
   onSuggestionClick: (suggestion: T) => void;
 };
 
-const SuggestionsList = <T,>({ suggestions, queryText, dataKey, onSuggestionClick }: Props<T>) => {
-  return (
-    <>
-      {suggestions.map((suggestion, index) => {
-        const currentSuggestion = typeof dataKey === 'string' ? suggestion[dataKey as keyof T] : suggestion;
+const SuggestionsList = <T,>({ suggestions, queryText, dataKey, onSuggestionClick }: Props<T>) =>
+  suggestions.map((suggestion, index) => {
+    const currentSuggestion = typeof dataKey === 'string' ? suggestion[dataKey as keyof T] : suggestion;
 
-        return (
-          <li key={index} className="suggestion-item" onClick={() => onSuggestionClick(suggestion)}>
-            {getHighlightedText(currentSuggestion as string, queryText)}
-          </li>
-        );
-      })}
-    </>
-  );
-};
+    return (
+      <li key={index} className="suggestion-item" onClick={() => onSuggestionClick(suggestion)}>
+        {getHighlightedText(currentSuggestion as string, queryText)}
+      </li>
+    );
+  });
 
 const getHighlightedText = (text: string, query: string) => {
   const parts = text.split(new RegExp(`(${query})`, 'gi'));
