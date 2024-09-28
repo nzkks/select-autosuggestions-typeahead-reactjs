@@ -1,7 +1,8 @@
-import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import * as _ from 'lodash';
 import SuggestionsList from '../suggestionsList/SuggestionsList';
 import './autocomplete.css';
+import useOutsideClick from '../../hooks/useOutsideClick';
 
 type Props<T> = {
   placeholder: string;
@@ -17,6 +18,8 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
   const [isOptionClicked, setIsOptionClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsOptionClicked(false);
@@ -91,8 +94,17 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
     }
   };
 
+  const handleOutsideClick = (event: Event) => {
+    if (suggestions.length > 0 && isOpen) {
+      setSuggestions([]);
+      setIsOpen(false);
+    }
+  };
+
+  useOutsideClick(containerRef, handleOutsideClick);
+
   return (
-    <div className="container">
+    <div ref={containerRef} className="container">
       <input
         type="text"
         value={inputValue}
