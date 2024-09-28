@@ -1,10 +1,11 @@
 type Props<T> = {
   suggestions: T[];
+  queryText: string;
   dataKey: T | string;
   onSuggestionClick: (suggestion: T) => void;
 };
 
-const SuggestionsList = <T,>({ suggestions, dataKey, onSuggestionClick }: Props<T>) => {
+const SuggestionsList = <T,>({ suggestions, queryText, dataKey, onSuggestionClick }: Props<T>) => {
   return (
     <>
       {suggestions.map((suggestion, index) => {
@@ -12,7 +13,7 @@ const SuggestionsList = <T,>({ suggestions, dataKey, onSuggestionClick }: Props<
 
         return (
           <li key={index} className="suggestion-item" onClick={() => onSuggestionClick(suggestion)}>
-            {currentSuggestion as string}
+            {getHighlightedText(currentSuggestion as string, queryText)}
           </li>
         );
       })}
@@ -20,4 +21,19 @@ const SuggestionsList = <T,>({ suggestions, dataKey, onSuggestionClick }: Props<
   );
 };
 
+const getHighlightedText = (text: string, query: string) => {
+  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  return (
+    <span>
+      {parts.map((part, index) => (
+        <span
+          key={index}
+          style={part.toLowerCase() === query.toLowerCase() ? { fontWeight: 'bold', color: '#0070f3' } : {}}
+        >
+          {part}
+        </span>
+      ))}
+    </span>
+  );
+};
 export default SuggestionsList;

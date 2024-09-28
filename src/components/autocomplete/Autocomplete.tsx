@@ -76,7 +76,12 @@ const Autocomplete = <T,>({ placeholder = '', fetchSuggestions, dataKey = '' }: 
       {isLoading && <div className="loading">Loading...</div>}
       {suggestions.length > 0 && (
         <ul className="suggestions-list" role="listbox">
-          <SuggestionsList suggestions={suggestions} dataKey={dataKey} onSuggestionClick={handleSuggestionClick} />
+          <SuggestionsList
+            suggestions={suggestions}
+            queryText={inputValue}
+            dataKey={dataKey}
+            onSuggestionClick={handleSuggestionClick}
+          />
         </ul>
       )}
     </div>
